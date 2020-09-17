@@ -81,6 +81,3 @@ def takeCommandViaAndroid(): #socket programming
             return message
     except IOError:
         print("Error: can \t find file or read data")
-
-
-

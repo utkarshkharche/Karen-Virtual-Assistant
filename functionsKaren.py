@@ -31,7 +31,7 @@ def mailSender():
         InputOutput.speak("and what should i say in email?")
         body = InputOutput.takeCommand()
         content = f"Subject: {subject}\n\n{body}"
-        to = "upkharche@gmail.com"  #revievers mail address
+        to = "upkharche@gmail.com"  # revievers mail address
         sendEmail(to, content)
         InputOutput.speak("Email has been send")
     except Exception as e:
@@ -128,7 +128,7 @@ def wikipediaSearch():
 
 def ageCalculate():
     currentDate = datetime.datetime.now()
-    deadline = '11/03/2000' #date of birth
+    deadline = '11/03/2000'  # date of birth
     deadlineDate = datetime.datetime.strptime(deadline, '%m/%d/%Y')
     daysLeft = deadlineDate - currentDate
     years = ((daysLeft.total_seconds())/(365.242*24*3600))
@@ -150,4 +150,63 @@ def ageCalculate():
     secondsInt = int(seconds)
     secondsStr = str(secondsInt).replace("-", "")
     TotalDays = str(daysLeft).replace("-", "")
-    InputOutput.speakPrint(f"You are {yearsStr} years {monthsStr} months {daysStr} days {hoursStr} hours {minutesStr} minutes {secondsStr} seconds old, sir. and Total Days Lived {TotalDays[:4]}")
+    InputOutput.speakPrint(
+        f"You are {yearsStr} years {monthsStr} months {daysStr} days {hoursStr} hours {minutesStr} minutes {secondsStr} seconds old, sir. and Total Days Lived {TotalDays[:4]}")
+
+
+def weather(quary):
+    USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
+    URL="https://google.com/search?q=%s" % quary
+    headers = {"user-agent": USER_AGENT}
+    resp = requests.get(URL, headers=headers)
+    if resp.status_code == 200:
+        soup = BeautifulSoup(resp.content,'lxml')
+        results = []
+        for g in soup.find_all('table'):
+            anchors = g.find_all('a')
+            if anchors:
+                link = anchors[0]['href']
+                results.append(link)
+    w_link = results[0]
+    link = requests.get(w_link).text
+    soup = BeautifulSoup(link, 'lxml')
+    temprature = soup.find('span', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--tempValue--3KcTQ').text
+    Location = soup.find('h1', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--location--1Ayv3').text
+    Today = soup.find('div', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--phraseValue--2xXSr').text
+    hl = soup.find('div', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--tempHiLoValue--A4RQE').text
+    Precipitation = soup.find('div', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--precipValue--RBVJT').text
+    Precipitation = soup.find('div', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--precipValue--RBVJT').text
+    fl = soup.find('span', class_='_-_-node_modules-@wxu-components-src-organism-TodayDetailsCard-TodayDetailsCard--feelsLikeTempValue--2aogo').text
+    wind = soup.find('span', class_='_-_-node_modules-@wxu-components-src-atom-WeatherData-Wind-Wind--windWrapper--1Va1P undefined').text
+    sunrise = soup.find('div', class_='_-_-node_modules-@wxu-components-src-molecule-SunriseSunset-SunriseSunset--sunriseDateItem--2ATeV').text
+    sunset = soup.find('div', class_='_-_-node_modules-@wxu-components-src-molecule-SunriseSunset-SunriseSunset--sunsetDateItem--2_gJb _-_-node_modules-@wxu-components-src-molecule-SunriseSunset-SunriseSunset--sunriseDateItem--2ATeV').text
+    aqi=soup.find('text',class_ ='_-_-node_modules-@wxu-components-src-molecule-DonutChart-DonutChart--innerValue--k2Z7I').text
+    aqistatus = soup.find('span', class_='_-_-node_modules-@wxu-components-src-molecule-AirQualityText-AirQualityText--severity--1VMr2').text
+    Humidity=soup.find('div', class_='_-_-node_modules-@wxu-components-src-molecule-WeatherDetailsListItem-WeatherDetailsListItem--wxData--23DP5')
+    InputOutput.PrintStr("temprature       :"+temprature,0.001)
+    print("")
+    InputOutput.PrintStr("Today            :"+Today,0.001)
+    print("")
+    InputOutput.PrintStr("Location         :"+Location,0.001)
+    print("")
+    InputOutput.PrintStr("High/Low         :"+hl,0.001)
+    print("")
+    InputOutput.PrintStr("Precipitation    :"+Precipitation,0.001)
+    print("")
+    InputOutput.PrintStr("Feels like       :"+ fl,0.001)
+    print("")
+    InputOutput.PrintStr("wind             :"+ wind,0.001)
+    print("")
+    for i in Humidity:
+        for j in soup.find('span', attrs={'data-testid': 'PercentageValue'}):
+            InputOutput.PrintStr("Humidity         :"+ j,0.001)
+            print("")
+            break
+        break
+    InputOutput.PrintStr("Sunrise at       :"+ sunrise,0.001)
+    print("")
+    InputOutput.PrintStr("Sunset at        :"+ sunset,0.001)
+    print("")
+    InputOutput.PrintStr("Air quality index:"+aqi+" - "+aqistatus,0.001)
+    print("")
+    InputOutput.speak(f"Right now it's {temprature} and {Today}, Today there will be {Precipitation} with forcasted high of {hl[:2]}° and low of {hl[3:5]}°. Due to the current Humidity feels like it's {fl}.")
