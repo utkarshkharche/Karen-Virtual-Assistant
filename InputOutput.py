@@ -81,3 +81,22 @@ def takeCommandViaAndroid(): #socket programming
             return message
     except IOError:
         print("Error: can \t find file or read data")
+
+
+def get_audio():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        r.pause_threshold = 1
+        audio = r.listen(source)
+
+    try:
+        print("Recognizing...")
+        query = r.recognize_google(audio,language='en-IN')
+        print(f"Said: {query}\n")
+
+    except Exception as e:
+        print(e)
+        print("Say that again please...")
+        return "None"
+    return query.lower()
