@@ -16,6 +16,7 @@ import functionsKaren
 import pyautogui
 import random
 from cv2 import cv2
+import json
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
@@ -99,6 +100,9 @@ def AllQuerise(query):
 
             elif 'email' in query:
                 functionsKaren.mailSender()
+
+            elif 'headlines' in query:
+                functionsKaren.news_headline()
 
             elif 'shutdown' in query or 'shut down' in query:
                 InputOutput.speak("shutting down sir, see you soon...")
