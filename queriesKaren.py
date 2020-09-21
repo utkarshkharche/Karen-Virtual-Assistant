@@ -18,6 +18,8 @@ import random
 from cv2 import cv2
 import json
 import pyjokes
+import PyPDF2
+from tkinter.filedialog import *
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -156,6 +158,16 @@ def AllQuerise(query):
 
             elif 'weather' in query:
                 functionsKaren.weather(query)
+
+            elif 'read file' in query:
+                book = askopenfilename()
+                pdfreader = PyPDF2.PdfFileReader(book)
+                pages = pdfreader.numPages
+
+                for num in range(0 ,pages):
+                    page = pdfreader.getPage(num)
+                    text = page.extractText()
+                    InputOutput.speak(text)
 
             elif 'tell jokes' in query or 'jokes' in query:
                 i = 1
