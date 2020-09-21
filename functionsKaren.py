@@ -12,6 +12,8 @@ import sys
 import time
 import multiprocessing
 import InputOutput
+from os import system, name
+from time import sleep
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
@@ -170,43 +172,53 @@ def weather(quary):
     w_link = results[0]
     link = requests.get(w_link).text
     soup = BeautifulSoup(link, 'lxml')
-    temprature = soup.find('span', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--tempValue--3KcTQ').text
-    Location = soup.find('h1', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--location--1Ayv3').text
-    Today = soup.find('div', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--phraseValue--2xXSr').text
-    hl = soup.find('div', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--tempHiLoValue--A4RQE').text
-    Precipitation = soup.find('div', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--precipValue--RBVJT').text
-    Precipitation = soup.find('div', class_='_-_-node_modules-@wxu-components-src-organism-CurrentConditions-CurrentConditions--precipValue--RBVJT').text
-    fl = soup.find('span', class_='_-_-node_modules-@wxu-components-src-organism-TodayDetailsCard-TodayDetailsCard--feelsLikeTempValue--2aogo').text
-    wind = soup.find('span', class_='_-_-node_modules-@wxu-components-src-atom-WeatherData-Wind-Wind--windWrapper--1Va1P undefined').text
-    sunrise = soup.find('div', class_='_-_-node_modules-@wxu-components-src-molecule-SunriseSunset-SunriseSunset--sunriseDateItem--2ATeV').text
-    sunset = soup.find('div', class_='_-_-node_modules-@wxu-components-src-molecule-SunriseSunset-SunriseSunset--sunsetDateItem--2_gJb _-_-node_modules-@wxu-components-src-molecule-SunriseSunset-SunriseSunset--sunriseDateItem--2ATeV').text
-    aqi=soup.find('text',class_ ='_-_-node_modules-@wxu-components-src-molecule-DonutChart-DonutChart--innerValue--k2Z7I').text
-    aqistatus = soup.find('span', class_='_-_-node_modules-@wxu-components-src-molecule-AirQualityText-AirQualityText--severity--1VMr2').text
-    Humidity=soup.find('div', class_='_-_-node_modules-@wxu-components-src-molecule-WeatherDetailsListItem-WeatherDetailsListItem--wxData--23DP5')
-    InputOutput.PrintStr("temprature       :"+temprature,0.001)
-    print("")
-    InputOutput.PrintStr("Today            :"+Today,0.001)
-    print("")
-    InputOutput.PrintStr("Location         :"+Location,0.001)
-    print("")
-    InputOutput.PrintStr("High/Low         :"+hl,0.001)
-    print("")
-    InputOutput.PrintStr("Precipitation    :"+Precipitation,0.001)
-    print("")
-    InputOutput.PrintStr("Feels like       :"+ fl,0.001)
-    print("")
-    InputOutput.PrintStr("wind             :"+ wind,0.001)
-    print("")
-    for i in Humidity:
-        for j in soup.find('span', attrs={'data-testid': 'PercentageValue'}):
-            InputOutput.PrintStr("Humidity         :"+ j,0.001)
-            print("")
-            break
-        break
-    InputOutput.PrintStr("Sunrise at       :"+ sunrise,0.001)
-    print("")
-    InputOutput.PrintStr("Sunset at        :"+ sunset,0.001)
-    print("")
-    InputOutput.PrintStr("Air quality index:"+aqi+" - "+aqistatus,0.001)
-    print("")
-    InputOutput.speak(f"Right now it's {temprature} and {Today}, Today there will be {Precipitation} with forcasted high of {hl[:2]}° and low of {hl[3:5]}°. Due to the current Humidity feels like it's {fl}.")
+    temprature = soup.find('span', class_='_3KcTQ').text
+    Location = soup.find('h1', class_='_1Ayv3').text
+    Today = soup.find('div', class_='_2xXSr').text
+    hl = soup.find('div', class_='A4RQE').text
+    fl = soup.find('span', class_='_2aogo').text
+    wind = soup.find('span', class_='_1Va1P undefined').text
+    sunrise = soup.find('p', class_='_2nwgx').text
+    sunset = soup.find('div', class_='_2_gJb _2ATeV').text
+    aqi=soup.find('text',class_ ='k2Z7I').text
+    aqistatus = soup.find('span', class_='_1VMr2').text
+    UHumidity=soup.find('span',attrs={'data-testid':'PercentageValue'}).text
+    VisibilityValue=soup.find('span',attrs={'data-testid':'VisibilityValue'}).text
+    uvindex=soup.find('span',attrs={'data-testid':'UVIndexValue'}).text
+    PressureValue=soup.find('span',attrs={'data-testid':'PressureValue'}).text
+    Precipitation=None
+    print("temprature       :",temprature)
+    print("Location         :",Location)
+    try:
+        Precipitation = soup.find('div', attrs={'data-testid':'precipPhrase'}).text
+        print("Precipitation    :",Precipitation)
+    except AttributeError:
+        pass
+    finally:
+        try:
+            p=soup.find('div',class_='_2xXSr').text
+            print("Now              :",p)
+        except AttributeError:
+            pass
+    print("Air quality index:",aqi+" - "+aqistatus)
+    print("Feels like       :", fl)
+    print("Sunrise at       :", sunrise)
+    print("Sunset at        :", sunset)
+    print("High/Low         :",hl)
+    print("wind             :", wind)
+    print("Humidity         :",UHumidity)
+    print("Pressure Value   :",PressureValue)
+    print("UV index         :",uvindex)
+    print("Visibility Value :",VisibilityValue)
+    if Precipitation==None:
+        InputOutput.speak(f"Right now it's {temprature} and {p}, Today there will be forcasted high of {hl[:2]}° and low of {hl[4:6]}°. Due to the current Humidity feels like it's {fl}.")
+    else:
+        InputOutput.speak(f"Right now it's {temprature} and {p}, Today there will be {Precipitation} with forcasted high of {hl[:2]}° and low of {hl[4:6]}°. Due to the current Humidity feels like it's {fl}.")
+
+
+def clear():
+    if name == 'nt':
+        _ = system('cls')
+    else:
+        _ = system('clear')
+    sleep(2)

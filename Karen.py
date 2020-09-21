@@ -22,4 +22,4 @@ import queriesKaren
 if __name__ == "__main__":
     if functionsKaren.checkInternetConnection() == True:
         functionsKaren.wishMe()
-        queriesKaren.queries()
+        queriesKaren.start()
