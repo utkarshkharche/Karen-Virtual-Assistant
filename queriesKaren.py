@@ -17,6 +17,8 @@ import pyautogui
 import random
 from cv2 import cv2
 import json
+import pyjokes
+
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
@@ -154,6 +156,15 @@ def AllQuerise(query):
 
             elif 'weather' in query:
                 functionsKaren.weather(query)
+
+            elif 'tell jokes' in query or 'jokes' in query:
+                i = 1
+                while(i<10):
+                    InputOutput.speak(pyjokes.get_joke())
+                    InputOutput.speak('next is')
+                    time.sleep(1)
+                    i += 1
+                InputOutput.speak('thanks for listening')
 
             elif 'take attendance' in query or 'attendance' in query:
                 lst=[]
