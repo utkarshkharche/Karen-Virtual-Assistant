@@ -1,0 +1,148 @@
+{
+    "intents":[
+        {
+            "tag":"youtube",
+            "patterns":[
+                "open youtube.","get me youtube.","youtube","launch youtube"
+            ],
+            "responses":[
+                "Opening youtube...","Getting youtube"
+            ]
+        },
+        {
+            "tag":"google",
+            "patterns":[
+                "search on google","open google","google","get me google"
+            ],
+            "responses":[
+                "Here's what I found on web...","Opening Google","Getting information from google"
+            ]
+        },
+        {
+            "tag":"vs code",
+            "patterns":[
+                "open vs code","launch code","launch vs code","open code","get me code"
+            ],
+            "responses":[
+                "Opening VS code..."
+            ]
+        },
+        {
+            "tag":"wikipedia",
+            "patterns":[
+                "search on wikipedia","get me from wikipedia"
+            ],
+            "responses":[
+                "According to wikipedia....","Here's what I found on wikipedia"
+            ]
+        },
+        {
+            "tag":"shutdown",
+            "patterns":[
+                "shutdown","turn off"
+            ],
+            "responses":[
+                "Shutting Down... ", "Good bye"
+            ]
+        },
+        {
+            "tag":"restart",
+            "patterns":[
+                "restart system","reboot"
+            ],
+            "responses":[
+                "Restarting..."
+            ]
+        },
+        {
+            "tag":"time",
+            "patterns":[
+                "what is the time","get me time","time"
+            ],
+            "responses":[
+                "The time is"
+            ]
+        },
+        {
+            "tag":"date",
+            "patterns":[
+                "what is todays date?","date","get me date","get me todays date"
+            ],
+            "responses":[
+                "Todays date is.."
+            ]
+        },
+        {
+            "tag":"stackoverflow",
+            "patterns":[
+                "Get stackoverflow","open stackoverflow"
+            ],
+            "responses":[
+                "getting stackoverflow"
+            ]
+        },
+        {
+            "tag":"music",
+            "patterns":[
+                "play music","open spotify"
+            ],
+            "responses":[
+                "Playing music..."
+            ]
+        },
+        {
+            "tag":"email",
+            "patterns":[
+                "send a mail ","write a mail"
+            ],
+            "responses":[
+                "sending email"
+            ]
+        },
+        {
+            "tag":"corona",
+            "patterns":[
+                "corona count","what is corona cases","corona cases"
+            ],
+            "responses":[
+                "Getting information from wikipedia"
+            ]
+        },
+        {
+            "tag":"age",
+            "patterns":[
+                "what is my age?","age","get me my age"
+            ],
+            "responses":[
+                "Your age is.."
+            ]
+        },
+        {
+            "tag":"weather",
+            "patterns":[
+                "what is today's weather?","today's forecast","How is the weather today?","how is today's weather?"
+            ],
+            "responses":[
+                "today's weather will be.."
+            ]
+        },
+        {
+            "tag":"click photo",
+            "patterns":[
+                "take a photo","click a photo","take a snap","snap"
+            ],
+            "responses":[
+                "taking snap"
+            ]
+        },
+        {
+            "tag":"screenshot",
+            "patterns":[
+                "click a screenshot","take a screenshot","take a screenshot"
+            ],
+            "responses":[
+                "taking screenshot"
+            ]
+        }
+    ]
+}
