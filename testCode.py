@@ -1,64 +1,148 @@
-import urllib
-import requests
+from __future__ import print_function
+import datetime
+import pickle
+import os.path
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+import pyttsx3
+import datetime
+import speech_recognition as sr
+import wikipedia
+import webbrowser
+import os
+import smtplib
+from googlesearch import *
 from bs4 import BeautifulSoup
-query="datala maharashtra weather"
-USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
-URL="https://google.com/search?q=%s" % query
-headers = {"user-agent": USER_AGENT}
-resp = requests.get(URL, headers=headers)
-if resp.status_code == 200:
-    soup = BeautifulSoup(resp.content,'lxml')
-    results = []
-    for g in soup.find_all('table'):
-        anchors = g.find_all('a')
-        if anchors:
-            link = anchors[0]['href']
-            results.append(link)
-# print(results)
-w_link = results[0]
-link = requests.get(w_link).text
-soup = BeautifulSoup(link, 'lxml')
-temprature = soup.find('span', class_='_3KcTQ').text
-Location = soup.find('h1', class_='_1Ayv3').text
-Today = soup.find('div', class_='_2xXSr').text
-hl = soup.find('div', class_='A4RQE').text
-fl = soup.find('span', class_='_2aogo').text
-wind = soup.find('span', class_='_1Va1P undefined').text
-sunrise = soup.find('p', class_='_2nwgx').text
-sunset = soup.find('div', class_='_2_gJb _2ATeV').text
-aqi=soup.find('text',class_ ='k2Z7I').text
-aqistatus = soup.find('span', class_='_1VMr2').text
-UHumidity=soup.find('span',attrs={'data-testid':'PercentageValue'}).text
-VisibilityValue=soup.find('span',attrs={'data-testid':'VisibilityValue'}).text
-uvindex=soup.find('span',attrs={'data-testid':'UVIndexValue'}).text
-PressureValue=soup.find('span',attrs={'data-testid':'PressureValue'}).text
-Precipitation=None
-print("temprature       :",temprature)
-print("Location         :",Location)
-try:
-    Precipitation = soup.find('div', attrs={'data-testid':'precipPhrase'}).text
-    print("Precipitation    :",Precipitation)
-except AttributeError:
-    pass
-finally:
-    try:
-        p=soup.find('div',class_='_2xXSr').text
-        print("Now              :",p)
-    except AttributeError:
-        pass
-print("Air quality index:",aqi+" - "+aqistatus)
-print("Feels like       :", fl)
-print("Sunrise at       :", sunrise)
-print("Sunset at        :", sunset)
-print("High/Low         :",hl)
-print("wind             :", wind)
-print("Humidity         :",UHumidity)
-print("Pressure Value   :",PressureValue)
-print("UV index         :",uvindex)
-print("Visibility Value :",VisibilityValue)
-if Precipitation==None:
-    print(f"Right now it's {temprature} and {p}, Today there will be forcasted high of {hl[:2]}° and low of {hl[4:6]}°. Due to the current Humidity feels like it's {fl}.")
-else:
-    print(f"Right now it's {temprature} and {p}, Today there will be {Precipitation} with forcasted high of {hl[:2]}° and low of {hl[4:6]}°. Due to the current Humidity feels like it's {fl}.")
+import requests
+import sys
+import time
+import multiprocessing
+import InputOutput
+import functionsKaren
+import pyautogui
+import random
+from cv2 import cv2
+import InputOutput
+import functionsKaren
+import queriesKaren
+import pytz
+
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[1].id)
+MONTHS = ["january", "february", "march", "april", "may", "june","july", "august", "september","october", "november", "december"]
+DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+DAY_EXTENTIONS = ["rd", "th", "st", "nd"]
+SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 
+def Authenticate_google():
+
+    creds = None
+
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+    service = build('calendar', 'v3', credentials=creds)
+    return service
+def get_events(day, service):
+    date = datetime.datetime.combine(day, datetime.datetime.min.time())
+    end_date = datetime.datetime.combine(day, datetime.datetime.max.time())
+    utc = pytz.UTC
+    date = date.astimezone(utc)
+    end_date = end_date.astimezone(utc)
+
+    events_result = service.events().list(calendarId='primary', timeMin=date.isoformat(), timeMax=end_date.isoformat(),
+                                        singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+
+    if not events:
+        InputOutput.speak('No upcoming events found.')
+    else:
+        InputOutput.speak(f"You have {len(events)} events on this day.")
+
+        for event in events:
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            print(start, event['summary'])
+            start_time = str(start.split("T")[1].split("-")[0])  # get the hour the event starts
+            if int(start_time.split(":")[0]) < 12:  # if the event is in the morning
+                start_time = start_time + "am"
+            else:
+                start_time = str(int(start_time.split(":")[0])-12) + start_time.split(":")[1] # convert 24 hour time to regular
+                start_time = start_time + "pm"
+
+            InputOutput.speak(event["summary"] + " at " + start_time)
+
+
+
+
+def get_date(text):
+    text = text.lower()
+    today = datetime.date.today()
+
+    if text.count("today") > 0:
+        return today
+
+    day = -1
+    day_of_week = -1
+    month = -1
+    year = today.year
+
+    for word in text.split():
+        if word in MONTHS:
+            month = MONTHS.index(word) + 1
+        elif word in DAYS:
+            day_of_week = DAYS.index(word)
+        elif word.isdigit():
+            day = int(word)
+        else:
+            for ext in DAY_EXTENTIONS:
+                found = word.find(ext)
+                if found > 0:
+                    try:
+                        day = int(word[:found])
+                    except:
+                        pass
+
+    if month < today.month and month != -1:  # if the month mentioned is before the current month set the year to the next
+        year = year+1
+
+    # This is slighlty different from the video but the correct version
+    if month == -1 and day != -1:  # if we didn't find a month, but we have a day
+        if day < today.day:
+            month = today.month + 1
+        else:
+            month = today.month
+
+    # if we only found a dta of the week
+    if month == -1 and day == -1 and day_of_week != -1:
+        current_day_of_week = today.weekday()
+        dif = day_of_week - current_day_of_week
+
+        if dif < 0:
+            dif += 7
+            if text.count("next") >= 1:
+                dif += 7
+
+        return today + datetime.timedelta(dif)
+
+    if day != -1:
+        return datetime.date(month=month, day=day, year=year)
+
+
+
+SERVICE = Authenticate_google()
+text=input("type here: ")
+get_events(get_date(text), SERVICE)

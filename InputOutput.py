@@ -22,6 +22,11 @@ def speak(audio):
     engine.say(audio)
     engine.runAndWait()
 
+def PrintStr(strslow, ts):
+    for l in strslow:
+        sys.stdout.write(l)
+        sys.stdout.flush()
+        time.sleep(ts)
 
 
 def speakPrint(spstr):
@@ -33,11 +38,7 @@ def speakPrint(spstr):
     p2.join()
 
 
-def PrintStr(strslow, ts):
-    for l in strslow:
-        sys.stdout.write(l)
-        sys.stdout.flush()
-        time.sleep(ts)
+
 
 def takeCommand():
     '''
@@ -62,7 +63,7 @@ def takeCommand():
 
 
 def takeCommandViaKeyborad():
-    ip = input("karen: ")
+    ip = input("karen: ")   #it takes input via keyboard
     return ip.lower()
 
 
@@ -81,22 +82,3 @@ def takeCommandViaAndroid(): #socket programming
             return message
     except IOError:
         print("Error: can \t find file or read data")
-
-
-def get_audio():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        print("Listening...")
-        r.pause_threshold = 1
-        audio = r.listen(source)
-
-    try:
-        print("Recognizing...")
-        query = r.recognize_google(audio,language='en-IN')
-        print(f"Said: {query}\n")
-
-    except Exception as e:
-        print(e)
-        print("Say that again please...")
-        return "None"
-    return query.lower()

@@ -57,7 +57,7 @@ def start():
     else:
         print("Invalid Input")
 
-def AllQuerise(query):
+def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the date
             if 'wikipedia' in query:
                 InputOutput.speak("Searching wikipedia...")
                 query = query.replace("wikipedia", "")
@@ -102,8 +102,7 @@ def AllQuerise(query):
 
             elif 'shutdown' in query or 'shut down' in query:
                 InputOutput.speak("shutting down sir, see you soon...")
-                os.startfile(
-                    "C:/Users/Utkarsh/Documents/Programs/Python/Karen/shutdown.lnk")
+                os.startfile("C:/Users/Utkarsh/Documents/Programs/Python/Karen/shutdown.lnk")
 
             elif 'restart' in query or 'reboot' in query:
                 InputOutput.speak("Rebooting laptop...")
@@ -125,7 +124,7 @@ def AllQuerise(query):
             elif 'corona count' in query or 'COVID-19' in query:
                 functionsKaren.coronaCount()
 
-            elif 'date' in query:
+            elif 'date' in query:   #whats the date
                 x = datetime.datetime.now()
                 InputOutput.speakPrint(x.strftime("it's %A, %B %d %Y \n"))
 
@@ -177,6 +176,9 @@ def AllQuerise(query):
             elif 'phone input' in query:
                 InputOutput.speakPrint("Taking Command from your phone sir\n")
                 commandsViaAndroid()
+
+            elif 'what do i have' in query or 'do i have plans' in query or 'am i busy' in query:
+                functionsKaren.GooglecalenderEvents(query)
             else:
                 if 'stop' in query or 'abort' in query or 'quit' in query:
                     InputOutput.speak("Good Bye sir, have a nice day")
@@ -184,8 +186,7 @@ def AllQuerise(query):
                 elif '' in query:
                     InputOutput.speak("Invalid input sir, please try again")
                 else:
-                    InputOutput.speak(
-                        "didnt find any command for this, should i google it?")
+                    InputOutput.speak("didnt find any command for this, should i google it?")
                     yesorno = InputOutput.takeCommand().lower()
                     if 'yes' in yesorno:
                         chrome_path = r'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
