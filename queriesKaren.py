@@ -20,6 +20,8 @@ import json
 import pyjokes
 import PyPDF2
 from tkinter.filedialog import *
+import wolframalpha
+
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -158,6 +160,20 @@ def AllQuerise(query):
 
             elif 'weather' in query:
                 functionsKaren.weather(query)
+
+            elif 'calculator' in query:
+                InputOutput.speak('Hello sir, I am smart calculator, What can i do for you')
+                try:
+                    question=InputOutput.takeCommand().lower()
+                    app_id="89393H-EH8TLAGXUE"   # this is unique id
+                    client = wolframalpha.Client('R2K75H-7ELALHR35X')
+                    res = client.query(question)
+                    answer = next(res.results).text
+                    InputOutput.speak(answer)
+                    print(answer)
+                except Exception as e:
+                    print(e)
+                    print("no result found in terms of standard mathematical functions")
 
             elif 'read file' in query:
                 book = askopenfilename()
