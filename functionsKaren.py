@@ -28,7 +28,6 @@ voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
 
 
-
 def sendEmail(to, content):
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.login('thekarenofficial@gmail.com', 'thekarenofficial@4')
@@ -168,11 +167,11 @@ def ageCalculate():
 
 def weather(query):
     USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
-    URL="https://google.com/search?q=%s" % query
+    URL = "https://google.com/search?q=%s" % query
     headers = {"user-agent": USER_AGENT}
     resp = requests.get(URL, headers=headers)
     if resp.status_code == 200:
-        soup = BeautifulSoup(resp.content,'lxml')
+        soup = BeautifulSoup(resp.content, 'lxml')
         results = []
         for g in soup.find_all('table'):
             anchors = g.find_all('a')
@@ -190,40 +189,46 @@ def weather(query):
     wind = soup.find('span', class_='_1Va1P undefined').text
     sunrise = soup.find('p', class_='_2nwgx').text
     sunset = soup.find('div', class_='_2_gJb _2ATeV').text
-    aqi=soup.find('text',class_ ='k2Z7I').text
+    aqi = soup.find('text', class_='k2Z7I').text
     aqistatus = soup.find('span', class_='_1VMr2').text
-    UHumidity=soup.find('span',attrs={'data-testid':'PercentageValue'}).text
-    VisibilityValue=soup.find('span',attrs={'data-testid':'VisibilityValue'}).text
-    uvindex=soup.find('span',attrs={'data-testid':'UVIndexValue'}).text
-    PressureValue=soup.find('span',attrs={'data-testid':'PressureValue'}).text
-    Precipitation=None
-    print("temprature       :",temprature)
-    print("Location         :",Location)
+    UHumidity = soup.find(
+        'span', attrs={'data-testid': 'PercentageValue'}).text
+    VisibilityValue = soup.find(
+        'span', attrs={'data-testid': 'VisibilityValue'}).text
+    uvindex = soup.find('span', attrs={'data-testid': 'UVIndexValue'}).text
+    PressureValue = soup.find(
+        'span', attrs={'data-testid': 'PressureValue'}).text
+    Precipitation = None
+    print("temprature       :", temprature)
+    print("Location         :", Location)
     try:
-        Precipitation = soup.find('div', attrs={'data-testid':'precipPhrase'}).text
-        print("Precipitation    :",Precipitation)
+        Precipitation = soup.find(
+            'div', attrs={'data-testid': 'precipPhrase'}).text
+        print("Precipitation    :", Precipitation)
     except AttributeError:
         pass
     finally:
         try:
-            p=soup.find('div',class_='_2xXSr').text
-            print("Now              :",p)
+            p = soup.find('div', class_='_2xXSr').text
+            print("Now              :", p)
         except AttributeError:
             pass
-    print("Air quality index:",aqi+" - "+aqistatus)
+    print("Air quality index:", aqi+" - "+aqistatus)
     print("Feels like       :", fl)
     print("Sunrise at       :", sunrise)
     print("Sunset at        :", sunset)
-    print("High/Low         :",hl)
+    print("High/Low         :", hl)
     print("wind             :", wind)
-    print("Humidity         :",UHumidity)
-    print("Pressure Value   :",PressureValue)
-    print("UV index         :",uvindex)
-    print("Visibility Value :",VisibilityValue)
-    if Precipitation==None:
-        InputOutput.speak(f"Right now it's {temprature} and {p}, Today there will be forcasted high of {hl[:2]}° and low of {hl[4:6]}°. Due to the current Humidity feels like it's {fl}.")
+    print("Humidity         :", UHumidity)
+    print("Pressure Value   :", PressureValue)
+    print("UV index         :", uvindex)
+    print("Visibility Value :", VisibilityValue)
+    if Precipitation == None:
+        InputOutput.speak(
+            f"Right now it's {temprature} and {p}, Today there will be forcasted high of {hl[:2]}° and low of {hl[4:6]}°. Due to the current Humidity feels like it's {fl}.")
     else:
-        InputOutput.speak(f"Right now it's {temprature} and {p}, Today there will be {Precipitation} with forcasted high of {hl[:2]}° and low of {hl[4:6]}°. Due to the current Humidity feels like it's {fl}.")
+        InputOutput.speak(
+            f"Right now it's {temprature} and {p}, Today there will be {Precipitation} with forcasted high of {hl[:2]}° and low of {hl[4:6]}°. Due to the current Humidity feels like it's {fl}.")
 
 
 def clear():
@@ -233,12 +238,14 @@ def clear():
         _ = system('clear')
     sleep(2)
 
+
 def GooglecalenderEvents(text):
-    MONTHS = ["january", "february", "march", "april", "may", "june","july", "august", "september","october", "november", "december"]
-    DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    MONTHS = ["january", "february", "march", "april", "may", "june",
+              "july", "august", "september", "october", "november", "december"]
+    DAYS = ["monday", "tuesday", "wednesday",
+            "thursday", "friday", "saturday", "sunday"]
     DAY_EXTENTIONS = ["rd", "th", "st", "nd"]
     SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
-
 
     def Authenticate_google():
 
@@ -259,6 +266,7 @@ def GooglecalenderEvents(text):
 
         service = build('calendar', 'v3', credentials=creds)
         return service
+
     def get_events(day, service):
         date = datetime.datetime.combine(day, datetime.datetime.min.time())
         end_date = datetime.datetime.combine(day, datetime.datetime.max.time())
@@ -267,8 +275,8 @@ def GooglecalenderEvents(text):
         end_date = end_date.astimezone(utc)
 
         events_result = service.events().list(calendarId='primary', timeMin=date.isoformat(), timeMax=end_date.isoformat(),
-                                            singleEvents=True,
-                                            orderBy='startTime').execute()
+                                              singleEvents=True,
+                                              orderBy='startTime').execute()
         events = events_result.get('items', [])
 
         if not events:
@@ -277,19 +285,21 @@ def GooglecalenderEvents(text):
             InputOutput.speak(f"You have {len(events)} events on this day.")
 
             for event in events:
-                start = event['start'].get('dateTime', event['start'].get('date'))
-                InputOutput.PrintStr(start + event['summary']+"\n",0.001)
-                start_time = str(start.split("T")[1].split("-")[0])  # get the hour the event starts
-                if int(start_time.split(":")[0]) < 12:  # if the event is in the morning
+                start = event['start'].get(
+                    'dateTime', event['start'].get('date'))
+                InputOutput.PrintStr(start + event['summary']+"\n", 0.001)
+                # get the hour the event starts
+                start_time = str(start.split("T")[1].split("-")[0])
+                # if the event is in the morning
+                if int(start_time.split(":")[0]) < 12:
                     start_time = start_time + "am"
                 else:
-                    start_time = str(int(start_time.split(":")[0])-12) + start_time.split(":")[1] # convert 24 hour time to regular
+                    # convert 24 hour time to regular
+                    start_time = str(int(start_time.split(
+                        ":")[0])-12) + start_time.split(":")[1]
                     start_time = start_time + "pm"
 
                 InputOutput.speak(event["summary"] + " at " + start_time)
-
-
-
 
     def get_date(text):
         text = text.lower()
@@ -319,7 +329,8 @@ def GooglecalenderEvents(text):
                         except:
                             pass
 
-        if month < today.month and month != -1:  # if the month mentioned is before the current month set the year to the next
+        # if the month mentioned is before the current month set the year to the next
+        if month < today.month and month != -1:
             year = year+1
 
         # This is slighlty different from the video but the correct version
@@ -345,11 +356,11 @@ def GooglecalenderEvents(text):
             return datetime.date(month=month, day=day, year=year)
     SERVICE = Authenticate_google()
     get_events(get_date(text), SERVICE)
+
+
 def news_headline():
     InputOutput.speak("News for today.. Lets begin")
-
-    url = "http://newsapi.org/v2/top-headlines?country=in&apiKey=556d8fb464f44228afed3a43ce962c57" # for india
-
+    url = "http://newsapi.org/v2/top-headlines?country=in&apiKey=556d8fb464f44228afed3a43ce962c57"  # for india
     news = requests.get(url).text
     news_dict = json.loads(news)
     arts = news_dict['articles']

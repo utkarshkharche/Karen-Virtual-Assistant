@@ -160,8 +160,8 @@ def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the
             elif 'weather' in query:
                 functionsKaren.weather(query)
 
-            elif 'calculator' in query:
-                InputOutput.speak('Hello sir, I am smart calculator, What can i do for you')
+            elif 'calculator' in query or 'calculate' in query:
+                InputOutput.speak('Ready to do mathematical problems, sir')
                 try:
                     question=InputOutput.takeCommand().lower()
                     app_id="89393H-EH8TLAGXUE"   # this is unique id
