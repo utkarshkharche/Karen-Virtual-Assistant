@@ -22,6 +22,7 @@ import multiprocessing
 import InputOutput
 from os import system, name
 from time import sleep
+import json
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
@@ -344,3 +345,17 @@ def GooglecalenderEvents(text):
             return datetime.date(month=month, day=day, year=year)
     SERVICE = Authenticate_google()
     get_events(get_date(text), SERVICE)
+def news_headline():
+    InputOutput.speak("News for today.. Lets begin")
+
+    url = "http://newsapi.org/v2/top-headlines?country=in&apiKey=556d8fb464f44228afed3a43ce962c57" # for india
+
+    news = requests.get(url).text
+    news_dict = json.loads(news)
+    arts = news_dict['articles']
+    for article in arts:
+        InputOutput.speak(article['title'])
+        print(article['title'])
+        InputOutput.speak("next  is")
+
+    InputOutput.speak("Thanks for listening...")

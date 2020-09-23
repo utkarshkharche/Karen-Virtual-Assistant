@@ -16,6 +16,13 @@ import functionsKaren
 import pyautogui
 import random
 from cv2 import cv2
+import json
+import pyjokes
+import PyPDF2
+from tkinter.filedialog import *
+import wolframalpha
+
+
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
@@ -100,6 +107,9 @@ def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the
             elif 'email' in query:
                 functionsKaren.mailSender()
 
+            elif 'headlines' in query:
+                functionsKaren.news_headline()
+
             elif 'shutdown' in query or 'shut down' in query:
                 InputOutput.speak("shutting down sir, see you soon...")
                 os.startfile("C:/Users/Utkarsh/Documents/Programs/Python/Karen/shutdown.lnk")
@@ -149,6 +159,39 @@ def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the
 
             elif 'weather' in query:
                 functionsKaren.weather(query)
+
+            elif 'calculator' in query:
+                InputOutput.speak('Hello sir, I am smart calculator, What can i do for you')
+                try:
+                    question=InputOutput.takeCommand().lower()
+                    app_id="89393H-EH8TLAGXUE"   # this is unique id
+                    client = wolframalpha.Client('R2K75H-7ELALHR35X')
+                    res = client.query(question)
+                    answer = next(res.results).text
+                    InputOutput.speak(answer)
+                    print(answer)
+                except Exception as e:
+                    print(e)
+                    print("no result found in terms of standard mathematical functions")
+
+            elif 'read file' in query:
+                book = askopenfilename()
+                pdfreader = PyPDF2.PdfFileReader(book)
+                pages = pdfreader.numPages
+
+                for num in range(0 ,pages):
+                    page = pdfreader.getPage(num)
+                    text = page.extractText()
+                    InputOutput.speak(text)
+
+            elif 'tell jokes' in query or 'jokes' in query:
+                i = 1
+                while(i<10):
+                    InputOutput.speak(pyjokes.get_joke())
+                    InputOutput.speak('next is')
+                    time.sleep(1)
+                    i += 1
+                InputOutput.speak('thanks for listening')
 
             elif 'take attendance' in query or 'attendance' in query:
                 lst=[]
