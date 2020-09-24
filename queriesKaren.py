@@ -21,6 +21,7 @@ import pyjokes
 import PyPDF2
 from tkinter.filedialog import *
 import wolframalpha
+from playsound import playsound
 
 
 engine = pyttsx3.init('sapi5')
@@ -159,6 +160,9 @@ def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the
 
             elif 'weather' in query:
                 functionsKaren.weather(query)
+            
+            elif 'alarm' in query:
+                functionsKaren.alarm()
 
             elif 'calculator' in query or 'calculate' in query:
                 InputOutput.speak('Ready to do mathematical problems, sir')
