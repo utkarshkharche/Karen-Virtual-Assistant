@@ -68,12 +68,7 @@ def start():
 
 def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the date
             if 'wikipedia' in query:
-                InputOutput.speak("Searching wikipedia...")
-                query = query.replace("wikipedia", "")
-                results = wikipedia.summary(query, sentences=2)
-                InputOutput.speak("wikipedia says,")
-                print(results)
-                InputOutput.speak(results)
+                functionsKaren.wikipediaSearch(query)
 
             elif 'open youtube' in query:
                 webbrowser.open("youtube.com")
@@ -161,9 +156,6 @@ def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the
 
             elif 'weather' in query:
                 functionsKaren.weather(query)
-            
-            elif 'alarm' in query:
-                functionsKaren.alarm()
 
             elif 'extract' in query:
                 InputOutput.speak("select a  file")
@@ -171,27 +163,25 @@ def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the
                 patoolib.extract_archive(file1)
                 InputOutput.speak('Done sir, file is extracted')
 
-            elif "write a note" in query: 
-                InputOutput.speak("What should i write, sir") 
-                note = InputOutput.takeCommand() 
-                file = open('note.txt', 'w') 
-                InputOutput.speak("Sir, Should i include date and time") 
-                snfm = InputOutput.takeCommand() 
-                if 'yes' in snfm or 'sure' in snfm: 
-                    strTime = datetime.datetime.now().strftime("%H:%M:%S") 
-                    file.write(strTime) 
-                    file.write(" :- ") 
-                    file.write(note) 
-                else: 
-                    file.write(note) 
-          
-            elif "show note" in query: 
-                InputOutput.speak("Showing Notes") 
-                file = open("note.txt", "r")  
-                print(file.read()) 
-                InputOutput.speak(file.read()) 
+            elif "write a note" in query:
+                InputOutput.speak("What should i write, sir")
+                note = InputOutput.takeCommand()
+                file = open('note.txt', 'w')
+                InputOutput.speak("Sir, Should i include date and time")
+                snfm = InputOutput.takeCommand()
+                if 'yes' in snfm or 'sure' in snfm:
+                    strTime = datetime.datetime.now().strftime("%H:%M:%S")
+                    file.write(strTime)
+                    file.write(" :- ")
+                    file.write(note)
+                else:
+                    file.write(note)
 
-
+            elif "show note" in query:
+                InputOutput.speak("Showing Notes")
+                file = open("note.txt", "r")
+                print(file.read())
+                InputOutput.speak(file.read())
 
             elif 'calculator' in query or 'calculate' in query:
                 InputOutput.speak('Ready to do mathematical problems, sir')

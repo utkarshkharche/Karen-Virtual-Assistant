@@ -130,7 +130,7 @@ def coronaCount():
     InputOutput.speak(f" Total patients Recovered are {states[103]}")
 
 
-def wikipediaSearch():
+def wikipediaSearch(query):
     InputOutput.speak("Searching wikipedia...")
     query = query.replace("wikipedia", "")
     results = wikipedia.summary(query, sentences=2)
@@ -373,36 +373,5 @@ def news_headline():
         InputOutput.speak("next  is")
 
     InputOutput.speak("Thanks for listening...")
-
-
-def alarm():
-    InputOutput.speak('Please tell me the subject for reminder')
-    a = InputOutput.takeCommand()
-    InputOutput.speak("tell me the time")
-    time = InputOutput.takeCommand()
-
-    if int(time[:2]) < 13 and int(time[:2]) > 9:
-        time1 = time[:2]
-    elif int(time[:1]) < 10:
-        time1 = time[:1]
-        time = f'0{time1}{time[1:]}'
-
-    InputOutput.speak("am ya pm")
-    ans = InputOutput.takeCommand()
-    if ans == 'pm'and int(time1) < 10:
-        time1 = int(time1) + 12
-    elif ans == 'am' and int(time1) == 12:
-        time1 = '00'
-            
-    InputOutput.speak("Ok sir, Reminder is set")
-    while True:
-        std_time = datetime.datetime.now().strftime("%H%M")
-
-        if time == std_time:
-            playsound('C:\\Users\\marot\\Downloads\\song1.mp3')
-            InputOutput.speak("hey buddy It's time "+a)
-            InputOutput.speak("hey buddy It's time "+a)
-            InputOutput.speak("hey buddy It's time "+a)
-            break
 
 
