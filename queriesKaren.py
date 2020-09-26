@@ -166,8 +166,31 @@ def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the
                 functionsKaren.alarm()
 
             elif 'extract' in query:
+                speak("Open file")
                 file1 = askopenfilename()
                 patoolib.extract_archive(file1)
+                speak('Done sir, file is extracted')
+
+            elif "write a note" in query: 
+                speak("What should i write, sir") 
+                note = takeCommand() 
+                file = open('note.txt', 'w') 
+                speak("Sir, Should i include date and time") 
+                snfm = takeCommand() 
+                if 'yes' in snfm or 'sure' in snfm: 
+                    strTime = datetime.datetime.now().strftime("%H:%M:%S") 
+                    file.write(strTime) 
+                    file.write(" :- ") 
+                    file.write(note) 
+                else: 
+                    file.write(note) 
+          
+            elif "show note" in query: 
+                speak("Showing Notes") 
+                file = open("note.txt", "r")  
+                print(file.read()) 
+                speak(file.read()) 
+
 
 
             elif 'calculator' in query or 'calculate' in query:
