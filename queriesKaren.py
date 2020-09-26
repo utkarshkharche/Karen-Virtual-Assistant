@@ -22,6 +22,7 @@ import PyPDF2
 from tkinter.filedialog import *
 import wolframalpha
 from playsound import playsound
+import patoolib
 
 
 engine = pyttsx3.init('sapi5')
@@ -163,6 +164,11 @@ def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the
             
             elif 'alarm' in query:
                 functionsKaren.alarm()
+
+            elif 'extract' in query:
+                file1 = askopenfilename()
+                patoolib.extract_archive(file1)
+
 
             elif 'calculator' in query or 'calculate' in query:
                 InputOutput.speak('Ready to do mathematical problems, sir')
