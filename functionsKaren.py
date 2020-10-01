@@ -376,17 +376,17 @@ def news_headline():
     InputOutput.speak("Thanks for listening...")
 
 def movie_info():
-    hr = imdb.IMDb()
+    moviesDB = imdb.IMDb()
     InputOutput.speak("Sir, can you Enter movie name")
     movie_name = InputOutput.takeCommand()
-    movies = hr.search_movie(str(movie_name))
+    movies = moviesDB.search_movie(str(movie_name))
     index = movies[0].getID()
-    movie = hr.get_movie(index)
+    movie = moviesDB.get_movie(index)
     title = movie["title"]
     year = movie['year']
     rating = movie['rating']
     cast = movie['cast']
-    cast = cast[:10]
+    cast = cast[:6]
 
     list_of_cast = '  ,  '.join(map(str,cast))
             
