@@ -23,6 +23,7 @@ from tkinter.filedialog import *
 import wolframalpha
 from playsound import playsound
 import patoolib
+import imdb
 
 
 engine = pyttsx3.init('sapi5')
@@ -156,6 +157,9 @@ def AllQuerise(query):  #query mahnje apn input deleli string eg. age, whats the
 
             elif 'weather' in query:
                 functionsKaren.weather(query)
+
+            elif 'movie' in query or 'movies' in query:
+                functionsKaren.movie_info()
 
             elif 'extract' in query:
                 InputOutput.speak("select a  file")

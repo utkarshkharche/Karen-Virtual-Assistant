@@ -24,6 +24,7 @@ from os import system, name
 from time import sleep
 import json
 from playsound import playsound
+import imdb
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -373,5 +374,32 @@ def news_headline():
         InputOutput.speak("next  is")
 
     InputOutput.speak("Thanks for listening...")
+
+def movie_info():
+    hr = imdb.IMDb()
+    InputOutput.speak("Sir, can you Enter movie name")
+    movie_name = InputOutput.takeCommand()
+    movies = hr.search_movie(str(movie_name))
+    index = movies[0].getID()
+    movie = hr.get_movie(index)
+    title = movie["title"]
+    year = movie['year']
+    rating = movie['rating']
+    cast = movie['cast']
+    cast = cast[:10]
+
+    list_of_cast = '  ,  '.join(map(str,cast))
+            
+    InputOutput.speak(f'title is {title}')
+    print('title = ', title)
+    InputOutput.speak(f'This movie is released in {year}')
+    print('year = ', year)
+    InputOutput.speak(f'rating of {title} this movie is {rating}')
+    print('rating = ',rating)
+    InputOutput.speak(f'full cast are {list_of_cast}')
+    print('full cast: ',list_of_cast)
+
+    
+
 
 
