@@ -1,0 +1,9 @@
+    How to run a Model
+
+For first time or you are re-training(changes in json file)
+1. Run nltk_utils.py
+2. Run model.py
+3. Run train.py
+4. Run ModelPredict.py
+
+Other than that just; Run ModelPredict.py
