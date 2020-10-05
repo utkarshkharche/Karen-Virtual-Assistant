@@ -37,7 +37,7 @@ while True:
         break
     
     query = tokenize(query)
-    X = bag_of_words(query, all_words)
+    X = bag_of_words(query, all_words  )  
     X = X.reshape(1, X.shape[0])
     X = torch.from_numpy(X).to(device)
 
